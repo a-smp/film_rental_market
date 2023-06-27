@@ -1,0 +1,139 @@
+-- Join tables & use CTE to return descriptive statistics.
+
+WITH descriptive_stats_cte (
+  film_id, genre, rating, rental_rate, 
+  rental_duration, language, customer_id, 
+  country_id, amount
+) AS (
+  SELECT 
+    F.film_id, 
+    E.name, 
+    F.rating, 
+    F.rental_rate, 
+    F.rental_duration, 
+    G.name, 
+    A.customer_id, 
+    J.country_id, 
+    K.amount 
+  FROM 
+    customer A 
+    INNER JOIN rental B ON A.customer_id = B.customer_id 
+    INNER JOIN inventory C ON B.inventory_id = C.inventory_id 
+    INNER JOIN film_category D ON C.film_id = D.film_id 
+    INNER JOIN category E ON D.category_id = E.category_id 
+    INNER JOIN film F ON C.film_id = F.film_id 
+    INNER JOIN language G ON F.language_id = G.language_id 
+    INNER JOIN address H ON A.address_id = H.address_id 
+    INNER JOIN city I ON H.city_id = I.city_id 
+    INNER JOIN country J ON I.country_id = J.country_id 
+    INNER JOIN payment K ON B.rental_id = K.rental_id
+) 
+SELECT 
+  COUNT(DISTINCT film_id) AS film_count, 
+  MODE() WITHIN GROUP (
+    ORDER BY 
+      genre
+  ) AS modal_genre, 
+  MODE() WITHIN GROUP (
+    ORDER BY 
+      rating
+  ) AS modal_rating, 
+  ROUND(
+    AVG(rental_rate), 
+    2
+  ) AS avg_rental_cost, 
+  ROUND(
+    AVG(rental_duration)
+  ) AS avg_rental_duration, 
+  MODE() WITHIN GROUP (
+    ORDER BY 
+      language
+  ) AS modal_language, 
+  COUNT (DISTINCT customer_id) AS customer_count, 
+  COUNT(DISTINCT country_id) AS country_count, 
+  ROUND(
+    SUM(amount)
+  ) AS total_revenue 
+FROM 
+  descriptive_stats_cte;
+
+
+--Return the top 10 countries with the highest amount of customers.
+
+SELECT 
+  A.country, 
+  COUNT(customer_id) AS count_customers 
+FROM 
+  country A 
+  INNER JOIN city B ON A.country_id = B.country_id 
+  INNER JOIN address C ON B.city_id = C.city_id 
+  INNER JOIN customer D ON C.address_id = D.address_id 
+GROUP BY 
+  A.country 
+ORDER BY 
+  COUNT(customer_id) DESC 
+LIMIT 
+  10;
+
+
+--Return top 10 cities within top 10 countries with the highest amount of customers.
+
+SELECT 
+  A.country, 
+  B.city, 
+  COUNT(customer_id) AS count_customers 
+FROM 
+  country A 
+  INNER JOIN city B ON A.country_id = B.country_id 
+  INNER JOIN address C ON B.city_id = C.city_id 
+  INNER JOIN customer D ON C.address_id = D.address_id 
+WHERE 
+  A.country IN (
+    'India', 'China', 'United States', 
+    'Japan', 'Mexico', 'Brazil', 'Russian Federation', 
+    'Philippines', 'Turkey', 'Indonesia'
+  ) 
+GROUP BY 
+  A.country, 
+  B.city 
+ORDER BY 
+  COUNT(customer_id) DESC 
+LIMIT 
+  10;
+
+--Find the average amount paid by the top 5 customers using subquery.
+
+SELECT 
+  AVG(total_amount_paid) AS average 
+FROM 
+  (
+    SELECT 
+      B.customer_id, 
+      B.first_name, 
+      B.last_name, 
+      D.city, 
+      E.country, 
+      SUM(amount) AS total_amount_paid 
+    FROM 
+      payment A 
+      INNER JOIN customer B ON A.customer_id = B.customer_id 
+      INNER JOIN address C ON B.address_id = C.address_id 
+      INNER JOIN city D ON C.city_id = D.city_id 
+      INNER JOIN country E ON D.country_id = E.country_id 
+    WHERE 
+      D.city IN (
+        'Aurora', 'Acua', 'Citrus Heights', 
+        'Iwaki', 'Ambattur', 'Shanwei', 'So Leopoldo', 
+        'Teboksary', 'Tianjin', 'Cianjur'
+      ) 
+    GROUP BY 
+      B.customer_id, 
+      B.first_name, 
+      B.last_name, 
+      D.city, 
+      E.country 
+    ORDER BY 
+      total_amount_paid DESC 
+    LIMIT 
+      5
+  ) AS total_amount_paid;
