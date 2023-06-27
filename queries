@@ -58,7 +58,7 @@ FROM
   descriptive_stats_cte;
 
 
--- Return top 10 cities within top 10 countries with the highest amount of customers.
+-- Return top 10 cities within top 10 countries with the highest amount of customers using multi-row subquery.
 
 SELECT 
   A.country, 
@@ -93,7 +93,7 @@ ORDER BY
 LIMIT 
   10;
 
--- Find the average amount paid by the top 5 customers using subquery.
+-- Find the average amount paid by the top 5 customers using multi-column subquery.
 
 SELECT 
   AVG(total_amount_paid) AS average 
