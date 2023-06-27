@@ -1,4 +1,4 @@
--- Join tables & use CTE to return descriptive statistics.
+## -- Join tables & use CTE to return descriptive statistics.
 
 WITH descriptive_stats_cte (
   film_id, genre, rating, rental_rate, 
@@ -58,25 +58,7 @@ FROM
   descriptive_stats_cte;
 
 
---Return the top 10 countries with the highest amount of customers.
-
-SELECT 
-  A.country, 
-  COUNT(customer_id) AS count_customers 
-FROM 
-  country A 
-  INNER JOIN city B ON A.country_id = B.country_id 
-  INNER JOIN address C ON B.city_id = C.city_id 
-  INNER JOIN customer D ON C.address_id = D.address_id 
-GROUP BY 
-  A.country 
-ORDER BY 
-  COUNT(customer_id) DESC 
-LIMIT 
-  10;
-
-
---Return top 10 cities within top 10 countries with the highest amount of customers.
+## Return top 10 cities within top 10 countries with the highest amount of customers.
 
 SELECT 
   A.country, 
@@ -89,9 +71,19 @@ FROM
   INNER JOIN customer D ON C.address_id = D.address_id 
 WHERE 
   A.country IN (
-    'India', 'China', 'United States', 
-    'Japan', 'Mexico', 'Brazil', 'Russian Federation', 
-    'Philippines', 'Turkey', 'Indonesia'
+    SELECT 
+      A.country 
+    FROM 
+      country A 
+      INNER JOIN city B ON A.country_id = B.country_id 
+      INNER JOIN address C ON B.city_id = C.city_id 
+      INNER JOIN customer D ON C.address_id = D.address_id 
+    GROUP BY 
+      A.country 
+    ORDER BY 
+      COUNT(customer_id) DESC 
+    LIMIT 
+      10
   ) 
 GROUP BY 
   A.country, 
@@ -101,7 +93,7 @@ ORDER BY
 LIMIT 
   10;
 
---Find the average amount paid by the top 5 customers using subquery.
+## Find the average amount paid by the top 5 customers using subquery.
 
 SELECT 
   AVG(total_amount_paid) AS average 
