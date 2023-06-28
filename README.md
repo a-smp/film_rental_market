@@ -22,3 +22,5 @@ A relational database was utilized to store the company's data pertaining to the
 * film
 
 To gain a comprehensive understanding of Rockbuster's internal database, I kindly advise referencing the accompanying **data dictionary** document. This document provides a detailed breakdown of the database structure, including all relevant information and relationships between tables.
+
+All the visualizations utilized in this analysis can be accessed through the Tableau Storyboard provided [here](https://public.tableau.com/views/RockbusterProject_16835747521510/Story1?:language=en-US&:display_count=n&:origin=viz_share_link).
