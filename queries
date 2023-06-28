@@ -1,4 +1,4 @@
--- Join tables & use CTE to return descriptive statistics.
+-- Return descriptive statistics using CTE.
 
 WITH descriptive_stats_cte (
   film_id, genre, rating, rental_rate, 
@@ -93,7 +93,8 @@ ORDER BY
 LIMIT 
   10;
 
--- Find the average amount paid by the top 5 customers using multi-column subquery.
+
+-- Find the average amount paid by the top 5 customers using nested subqueries.
 
 SELECT 
   AVG(total_amount_paid) AS average 
@@ -114,9 +115,36 @@ FROM
       INNER JOIN country E ON D.country_id = E.country_id 
     WHERE 
       D.city IN (
-        'Aurora', 'Acua', 'Citrus Heights', 
-        'Iwaki', 'Ambattur', 'Shanwei', 'So Leopoldo', 
-        'Teboksary', 'Tianjin', 'Cianjur'
+        SELECT 
+          B.city 
+        FROM 
+          country A 
+          INNER JOIN city B ON A.country_id = B.country_id 
+          INNER JOIN address C ON B.city_id = C.city_id 
+          INNER JOIN customer D ON C.address_id = D.address_id 
+        WHERE 
+          A.country IN (
+            SELECT 
+              A.country 
+            FROM 
+              country A 
+              INNER JOIN city B ON A.country_id = B.country_id 
+              INNER JOIN address C ON B.city_id = C.city_id 
+              INNER JOIN customer D ON C.address_id = D.address_id 
+            GROUP BY 
+              A.country 
+            ORDER BY 
+              COUNT(customer_id) DESC 
+            LIMIT 
+              10
+          ) 
+        GROUP BY 
+          A.country, 
+          B.city 
+        ORDER BY 
+          COUNT(customer_id) DESC 
+        LIMIT 
+          10
       ) 
     GROUP BY 
       B.customer_id, 
