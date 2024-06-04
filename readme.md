@@ -20,4 +20,4 @@ A relational database was utilized to store the company's data pertaining to the
 * film
 
 ## ADDITIONAL LINKS
-[Tableau Project](https://public.tableau.com/views/RockbusterProject_16835747521510/Story1?:language=en-US&:display_count=n&:origin=viz_share_link).
+[Tableau Project](https://public.tableau.com/views/RockbusterProject_16835747521510/Story1?:language=en-US&:display_count=n&:origin=viz_share_link)
