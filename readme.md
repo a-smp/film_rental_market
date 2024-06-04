@@ -19,4 +19,5 @@ A relational database was utilized to store the company's data pertaining to the
 * payment
 * film
 
-All the visualizations utilized in this analysis can be accessed through the Tableau Storyboard provided [here](https://public.tableau.com/views/RockbusterProject_16835747521510/Story1?:language=en-US&:display_count=n&:origin=viz_share_link).
+## ADDITIONAL LINKS
+[Tableau Project](https://public.tableau.com/views/RockbusterProject_16835747521510/Story1?:language=en-US&:display_count=n&:origin=viz_share_link).
