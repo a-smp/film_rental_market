@@ -1,4 +1,4 @@
-# ROCKBUSTER STEALTH LCC—SQL PROJECT
+# ROCKBUSTER FILM ANALYISIS — SQL/TABLEAU PROJECT
 ## INTRODUCTION
 Rockbuster Stealth LLC, a fictional global movie rental company, is taking measures to stay ahead of the competition posed by streaming giants such as Netflix and Amazon Prime. In an effort to adapt to the changing landscape of the movie rental industry, the company has decided to launch an online video rental service using its extensive movie licenses. This move demonstrates the company's commitment to offering a diverse range of services to its customers and maintaining its position as a leading player in the movie rental market. With this new initiative, Rockbuster Stealth LLC aims to provide its loyal customers with greater convenience and accessibility to their favorite movies, while also attracting new customers to its platform.
 ## OBJECTIVE
